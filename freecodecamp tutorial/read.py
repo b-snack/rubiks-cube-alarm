@@ -3,21 +3,10 @@ import sys
 
 capture = cv.VideoCapture(0)
 
-
-def rescaleFrame(frame, scale=0.75):
-  # Img, video, live video
-  width = int(frame.shape[1] * scale)
-  height= int(frame.shape[0] * scale)
-  dimensions=(width, height)
-
-  return cv.resize(frame, dimensions, interpolation=cv.INTER_AREA)
-
 while True:
   isTrue, frame = capture.read()
 
-  frame_resized = rescaleFrame(frame)
-
-  cv.imshow("Video Resized", frame_resized)
+  cv.imshow("Video Resized", frame)
 
   if cv.waitKey(20) & 0xFF==ord('d'):
     break

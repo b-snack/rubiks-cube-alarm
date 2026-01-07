@@ -15,9 +15,7 @@ rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
 cv.imshow("rgb", rgb)
 
 greyhsv = cv.cvtColor(hsv, cv.COLOR_BGR2GRAY)
-cv.imshow('greyhsv',greyhsv)
+cv.imshow('greyhsv',greyhsv) # would probably work best for detecting colors on the cube? or like idk difference? it coudl detect where the cube is but it likely won't be able to tell the colorus apart form each other
 
-greylab = cv.cvtColor(hsv, cv.COLOR_RGB2GRAY)
-cv.imshow('greylab',greylab)
 
 cv.waitKey(0)
