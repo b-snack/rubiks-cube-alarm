@@ -23,18 +23,25 @@ def is_there(frame):
   # count num of colors present
   for color_name, (lower, upper) in color_info.items():
     mask = cv.inRange(img, lower, upper)
-    masked = cv.bitwise_and(img, mask, mask=mask)
-    cv.imshow("masked", masked)
+    masked = cv.bitwise_and(frame, frame, mask=mask)
+
+    cv.imshow(f"{color_name} mask", mask)
+    cv.imshow(f"{color_name} masked", masked)
+
     if cv.countNonZero(mask) > threshold:
       colors_found += 1
   
   return_value = False
-  if colors_found == 3:
+  if colors_found >= 3:
     return_value = True
 
   return return_value
 
+result = is_there(frame)
+print(result)
 
+cv.waitKey(0)
+cv.destroyAllWindows()
 
 
 
