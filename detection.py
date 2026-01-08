@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 
-frame = cv.imread('Photos/cube.png') #using placehodler for now.
+frame = cv.imread('Photos/cube.png')
 
   #mask (no white)
 COLOR_INFO = {
@@ -51,9 +51,6 @@ def is_there(frame):
     opening = cv.morphologyEx(mask, cv.MORPH_OPEN, kernel)
     final_mask = cv.morphologyEx(opening, cv.MORPH_CLOSE, kernel)
 
-    cv.imshow(f"{color_name} mask", final_mask)
-    cv.imshow(f"{color_name} masked", masked)
-
     if cv.countNonZero(final_mask) > threshold:
       colors_found += 1
       significant_colours.append(color_name)
@@ -89,16 +86,6 @@ def is_solved(frame):
           print(f'{color_name} face solved')
   
   return solved_sides
-
-result = is_there(frame)
-print(result)
-
-result1 = is_solved(frame)
-print(result1)
-
-cv.waitKey(0)
-cv.destroyAllWindows()
-
 
 
 """
