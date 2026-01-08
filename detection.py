@@ -42,6 +42,20 @@ def is_red(color_name, image):
   
   return mask
 
+def calc_params(p1, p2):
+  if p2[1] - p1[1] == 0:
+    a = 0.0
+    b = -1.0
+  elif p2[0] - p1[1] == 0:
+    a = -1.0
+    b = 0.0
+  else:
+    a = (p2[1] - p1[1])/ (p2[0] - p1[0])
+    b = -1.0
+  c = (-a * p1[0] - b * p1[1])
+  
+  return a, b, c
+
 def is_quadrilateral(mask_image):
 
   contours, _ = cv.findContours(mask_image, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
