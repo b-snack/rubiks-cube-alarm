@@ -1,0 +1,55 @@
+
+  gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+  blurred = cv.GaussianBlur(gray, (5,5), 0)
+  edges = cv.Canny(blurred, 50, 150)
+  hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+
+  cv.imshow("Canny edges", edges)
+  
+  contours, _ = cv.findContours(edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+
+  min_area = 500
+  kernel = np.ones((5,5), np.uint8)
+  solved_sides = 0
+
+  for contour in contours:
+    perimeter = cv.arcLength(contour, True)
+    approx = cv.approxPolyDP(contour, 0.02 * perimeter, True)
+
+    if len(approx) == 4 and cv.contourArea(contour) > min_area:
+      blank = np.zeros(frame.shape[:2], dtype='uint8')
+      cv.drawContours(blank, [approx], 0,255, -1)
+
+      # side_area = cv.bitwise_and(frame, frame, mask=blank)
+      face_area = cv.contourArea(contour)
+      face_is_solved = False
+
+      print(f"Checking face with area: {face_area}")
+
+      for color_name, (lower, upper) in COLOR_INFO.items():
+        print("found valid quadrialteral")
+
+        if color_name == "red":
+          mask = is_red(color_name, hsv)
+        else:
+          mask = cv.inRange(hsv, lower, upper)
+
+        print(f"{color_name}: {color_pixels} pixels; needed: {threshold}")
+
+        opening = cv.morphologyEx(mask, cv.MORPH_OPEN, kernel)
+        final_mask = cv.morphologyEx(opening, cv.MORPH_CLOSE, kernel)
+
+        final_mask = cv.bitwise_and(final_mask, blank)
+
+        color_pixels = cv.countNonZero(final_mask)
+        threshold = 0.85*face_area
+        
+        if color_pixels >= threshold:
+          face_is_solved = True
+          break
+      
+      if face_is_solved:
+        solved_sides += 1
+
+    
+  return solved_sides >= 3, solved_sides

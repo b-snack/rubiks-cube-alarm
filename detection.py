@@ -1,12 +1,12 @@
 import cv2 as cv
 import numpy as np
 
-frame = cv.imread('Photos/cube2.png') #using placehodler for now.
+frame = cv.imread('Photos/cube.png') #using placehodler for now.
 
   #mask (no white)
 COLOR_INFO = {
   'blue': (np.array([100,150,0]), np.array([140,255,255])),
-  'green': (np.array([100,25,25]), np.array([80,255,255])), # or 40,50,50,80,255,255
+  'green': (np.array([40,50,50]), np.array([80,255,255])), # or 40,50,50,80,255,255
   'orange': (np.array([12, 150, 100]), np.array([18, 255, 255])),
   'yellow': (np.array([22,100,100]), np.array([38,255,255])),
   'red': (None, None)
@@ -35,6 +35,9 @@ def is_there(frame):
   threshold = 500
   kernel = np.ones((5,5), np.uint8)
 
+  # significatn colours
+  significant_colours = []
+
   # count num of colors present
   for color_name, (lower, upper) in COLOR_INFO.items():
 
@@ -53,6 +56,7 @@ def is_there(frame):
 
     if cv.countNonZero(final_mask) > threshold:
       colors_found += 1
+      significant_colours.append(color_name)
   
   return_value = False
   if colors_found >= 3:
@@ -61,55 +65,36 @@ def is_there(frame):
   return return_value
 
 def is_solved(frame):
-  gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-  blurred = cv.GaussianBlur(gray, (5,5), 0)
-  edges = cv.Canny(gray, 50, 150)
-
-  cv.imshow("Canny edges", edges)
-  
-  contours, _ = cv.findContours(edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-
-  min_area = 2000
-  threshold = 500
+  hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
   kernel = np.ones((5,5), np.uint8)
   solved_sides = 0
 
-  for contour in contours:
-    perimeter = cv.arcLength(contour, 1)
-    approx = cv.approxPolyDP(contour, 0.02 * perimeter, True)
-
-    if len(approx) == 4 and cv.contourArea(contour) > min_area:
-      blank = np.zeros(frame.shape[:2], dtype='uint8')
-      cv.drawContours(blank, [approx], 0,255, -1)
-
-      side_area = cv.bitwise_and(frame, frame, mask=blank)
-
-      for color_name, (lower, upper) in COLOR_INFO.items():
-
-        if color_name == "red":
-          mask = is_red(color_name, frame)
-        else:
-          mask = cv.inRange(frame, lower, upper)
-
-        masked = cv.bitwise_and(frame, frame, mask=mask)
-
-        opening = cv.morphologyEx(mask, cv.MORPH_OPEN, kernel)
-        final_mask = cv.morphologyEx(opening, cv.MORPH_CLOSE, kernel)
-
-        if cv.countNonZero(final_mask) >= 0.85*cv.countNonZero(side_area):
-          solved_sides += 1
-
-    return_value = False
-    if solved_sides == 3:
-      return_value = True
+  for color_name, (lower, upper) in COLOR_INFO.items():
+    if color_name == "red":
+      mask = is_red(color_name, hsv)
+    else:
+      mask = cv.inRange(hsv, lower, upper)
     
-    return return_value
+    opening = cv.morphologyEx(mask, cv.MORPH_OPEN, kernel)
+    final_mask = cv.morphologyEx(opening, cv.MORPH_CLOSE, kernel)
+
+    contours, _ = cv.findContours(final_mask, cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)
+
+    if len(contours) > 0:
+      largest = max(contours, key=cv.contourArea)
+
+      if cv.contourArea(largest) > 5000:
+        if len(contours) == 1 or cv.contourArea(largest) > 0.85*sum(cv.contourArea(c) for c in contours):
+          solved_sides += 1
+          print(f'{color_name} face solved')
+  
+  return solved_sides
 
 result = is_there(frame)
 print(result)
 
 result1 = is_solved(frame)
-print(is_solved(frame))
+print(result1)
 
 cv.waitKey(0)
 cv.destroyAllWindows()
