@@ -1,14 +1,13 @@
 import datetime
-import os
 import time
+import pygame
 
-def alarm():
-  running = True
-  while running:
-    now = datetime.datetime.now()
-    if now.hour == 7 and now.minute ==30:
-      os.system("start alarm.mp3")
-      # os.system("cvlc --play-and-exit alarm.mp3 &") for pi
-      time.sleep(61)
+def play_alarm():
+  pygame.mixer.init()
+  pygame.mixer.music.load("media/alarm.mp3")
+  pygame.mixer.music.play(loops=-1)
 
-    time.sleep(30)
+def stop_alarm():
+  pygame.mixer.music.stop()
+
+# os.system("cvlc --play-and-exit alarm.mp3 &") for pi
