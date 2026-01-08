@@ -1,0 +1,11 @@
+# Python cache
+__pycache__/
+
+# Learning materials
+learning-materials/
+
+# Virtual environment
+myenv/
+
+# Photos folder
+Photos/
