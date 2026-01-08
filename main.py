@@ -17,7 +17,7 @@ def main():
       while not is_there(photo()):
         time.sleep(2)
       
-      while is_solved(photo()) != 3:
+      while is_solved(photo()) != True:
         time.sleep(2)
       
       stop_alarm()

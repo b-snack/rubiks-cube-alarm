@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 
-frame = cv.imread('Photos/cube.png')
+frame = cv.imread('Photos/cube2.png') #using placehodler for now.
 
   #mask (no white)
 COLOR_INFO = {
@@ -12,21 +12,7 @@ COLOR_INFO = {
   'red': (None, None)
 }
 
-OPPOSITES = {
-  "1": ["blue", "green"],
-  "2": ["red", "orange"]
-  # no white & yelo b/c it doesnt detect white. 
-}
-
-def check_opposites(solved_colors, opposite_colors):
-  true_false = True
-
-  for pair in opposite_colors.values():
-    if pair[0] in solved_colors and pair[1] in solved_colors:
-      true_false = False
-  
-  return true_false
-      
+# actual thing will need to take a photo first.
 
 def is_red(color_name, image):
   if color_name == 'red':
@@ -65,6 +51,9 @@ def is_there(frame):
     opening = cv.morphologyEx(mask, cv.MORPH_OPEN, kernel)
     final_mask = cv.morphologyEx(opening, cv.MORPH_CLOSE, kernel)
 
+    cv.imshow(f"{color_name} mask", final_mask)
+    cv.imshow(f"{color_name} masked", masked)
+
     if cv.countNonZero(final_mask) > threshold:
       colors_found += 1
       significant_colours.append(color_name)
@@ -79,7 +68,6 @@ def is_solved(frame):
   hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
   kernel = np.ones((5,5), np.uint8)
   solved_sides = 0
-  solved_colors = []
 
   for color_name, (lower, upper) in COLOR_INFO.items():
     if color_name == "red":
@@ -99,22 +87,22 @@ def is_solved(frame):
         if len(contours) == 1 or cv.contourArea(largest) > 0.85*sum(cv.contourArea(c) for c in contours):
           solved_sides += 1
           print(f'{color_name} face solved')
-          solved_colors.append(color_name)
   
-  return_value = check_opposites(solved_colors, OPPOSITES)
+  return solved_sides
 
-  print(solved_sides, return_value)
+result = is_there(frame)
+print(result)
 
-  return return_value
+result1 = is_solved(frame)
+print(result1)
+
+cv.waitKey(0)
+cv.destroyAllWindows()
+
 
 
 """
 Sources (for future reference):
 - https://www.youtube.com/watch?v=oXlwWbU8l2o
 - https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
-"""
-
-"""
-
-
 """

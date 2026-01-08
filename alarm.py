@@ -1,5 +1,3 @@
-import datetime
-import time
 import pygame
 
 def play_alarm():

@@ -86,3 +86,11 @@ dilated = cv.dilate(testimg, (kernel, kernel), iterations = n)
 
 eroded = cv.erode(dilated, (kernel, kernel), iterations = k)
 ```
+
+## Adaptive Thresh - THRESH_MASK will probably be very helpful later on:
+
+```
+# adaptive
+adaptive_thresh = cv.adaptiveThreshold(gray, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 65, 5)
+cv.imshow("adaptive", adaptive_thresh)
+```
