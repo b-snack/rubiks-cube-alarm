@@ -1,17 +1,18 @@
 import cv2 as cv
 import random
 
-def take_photo():
+def photo():
   cap = cv.VideoCapture(0)
   ret,frame = cap.read() 
-
-  while(True):
-    cv.imshow('img1',frame) 
-    cv.imwrite(f'Photos/cube{random.randint(3, 500000)}.png',frame)
-    cv.destroyAllWindows()
-    break
+  return_value = None
 
   cap.release()
+  
+  if ret:
+    return_value = frame
+  
+  return return_value
+    
 
 """
 Sources:
