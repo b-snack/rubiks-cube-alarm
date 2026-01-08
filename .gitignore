@@ -9,3 +9,6 @@ myenv/
 
 # Photos folder
 Photos/
+
+# Workspace files
+*.code-workspace
