@@ -1,5 +1,6 @@
 import cv2 as cv
 import numpy as np
+import matplotlib.pyplot as plt
 
 frame = cv.imread('Photos/cube.png')
 
@@ -40,6 +41,31 @@ def is_red(color_name, image):
     mask = cv.bitwise_or(mask1, mask2)
   
   return mask
+
+def is_quadrilateral(mask_image):
+
+  contours, _ = cv.findContours(mask_image, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+
+  convex_hull_img =np.zeros_like(mask_image)
+  
+  for contour in contours:
+    hull = cv.convexHull(contour)
+    cv.drawContours(convex_hull_img, [hull], 0, 255, -1)
+
+
+  minLineLength = min (mask_image.shape[0],mask_image.shape[1])/3
+  lines = cv.HoughLinesP(convex_hull_img,mask_image, rho = 1,theta = 1*np.pi/180,threshold = 50, minLineLength = minLineLength,maxLineGap = 50)
+
+  tmp_img = np.zeros((mask_image.shape[0],mask_image.shape[1]), dtype = np.uint8)
+  for i in range(lines.shape[0]):
+      x1 = lines[i][0][0]
+      y1 = lines[i][0][1]    
+      x2 = lines[i][0][2]
+      y2 = lines[i][0][3]    
+      cv.line(tmp_img,(x1,y1),(x2,y2),(255,0,0),2)
+  plt.imshow(tmp_img)
+
+
 
 def is_there(frame):
   img = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
@@ -112,9 +138,5 @@ def is_solved(frame):
 Sources (for future reference):
 - https://www.youtube.com/watch?v=oXlwWbU8l2o
 - https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
-"""
-
-"""
-
-
+- https://nhuvan.github.io/blog/005-quadrilateral/
 """
