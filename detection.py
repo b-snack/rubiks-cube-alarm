@@ -162,7 +162,8 @@ def is_solved(frame):
 
   return return_value
 
-is_solved(frame)
+if __name__ == "__main__":
+  is_solved(frame)
 
 """
 Sources (for future reference):
