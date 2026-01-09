@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
 
-frame = cv.imread('Photos/cube.png')
+frame = cv.imread('Photos/cube2.png')
 
   #mask (no white)
 COLOR_INFO = {
@@ -46,7 +46,7 @@ def calc_params(p1, p2):
   if p2[1] - p1[1] == 0:
     a = 0.0
     b = -1.0
-  elif p2[0] - p1[1] == 0:
+  elif p2[0] - p1[0] == 0:
     a = -1.0
     b = 0.0
   else:
@@ -65,7 +65,7 @@ def find_intersection(params1, params2):
     return_value = (-1, -1)
   else:
     x = (params2[1] * (-params1[2]) - params1[1] * (-params2[2])) / det
-    y = (params2[0] * (-params1[2]) - params1[0] * (-params2[2])) / det
+    y = (params1[0] * (-params2[2]) - params2[0] * (-params1[2])) / det
     return_value = (int(x), int(y))
   
   return return_value
@@ -73,7 +73,6 @@ def find_intersection(params1, params2):
 def is_quadrilateral(mask_image):
 
   contours, _ = cv.findContours(mask_image, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-
   convex_hull_img =np.zeros_like(mask_image)
   
   for contour in contours:
@@ -82,18 +81,37 @@ def is_quadrilateral(mask_image):
 
 
   minLineLength = min (mask_image.shape[0],mask_image.shape[1])/3
-  lines = cv.HoughLinesP(convex_hull_img,mask_image, rho = 1,theta = 1*np.pi/180,threshold = 50, minLineLength = minLineLength,maxLineGap = 50)
+  lines = cv.HoughLinesP(convex_hull_img, rho = 1,theta = np.pi/180,threshold = 30, minLineLength = minLineLength,maxLineGap = 20)
 
-  tmp_img = np.zeros((mask_image.shape[0],mask_image.shape[1]), dtype = np.uint8)
-  for i in range(lines.shape[0]):
-      x1 = lines[i][0][0]
-      y1 = lines[i][0][1]    
-      x2 = lines[i][0][2]
-      y2 = lines[i][0][3]    
-      cv.line(tmp_img,(x1,y1),(x2,y2),(255,0,0),2)
-  plt.imshow(tmp_img)
+  corners = []
 
+  if lines is not None:
+    lines = np.squeeze(lines)
+    tmp_img = mask_image.copy()
 
+    if lines.ndim == 1:
+      lines=lines.reshape(1,-1)
+
+    if len(lines) >= 4:
+      print(len(lines))
+      params = []
+      for i in range(4):
+        params.append(calc_params([lines[i][0], lines [i][1]], [lines[i][2], lines[i][3]]))
+      print(params)
+      for i in range(len(params)):
+        for n in range(i, len(params)):
+          intersec = find_intersection(params[i], params[n])
+          if (intersec[1] > 0 and intersec[0] > 0 and intersec [1] < mask_image.shape[0] and intersec[0] < mask_image.shape[1]):
+            print(f"Corner: {intersec}")
+            corners.append(intersec)
+      
+      for i in range(len(corners)):
+        cv.circle(tmp_img, corners[i], 5, (255), 5)
+
+      plt.axis('off')
+      plt.imshow(tmp_img)
+  
+  return len(corners) == 4
 
 def is_there(frame):
   img = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
@@ -150,17 +168,21 @@ def is_solved(frame):
       largest = max(contours, key=cv.contourArea)
 
       if cv.contourArea(largest) > 5000:
-        if len(contours) == 1 or cv.contourArea(largest) > 0.85*sum(cv.contourArea(c) for c in contours):
-          solved_sides += 1
-          print(f'{color_name} face solved')
-          solved_colors.append(color_name)
-  
+        if is_quadrilateral(final_mask):
+          if len(contours) == 1 or cv.contourArea(largest) > 0.85*sum(cv.contourArea(c) for c in contours):
+            solved_sides += 1
+            print(f'{color_name} face solved')
+            solved_colors.append(color_name)
+        else:
+          print(f"{color_name} isnt a quadriatlerial")
+
   return_value = check_opposites(solved_colors, OPPOSITES)
 
   print(solved_sides, return_value)
 
   return return_value
 
+is_solved(frame)
 
 """
 Sources (for future reference):
