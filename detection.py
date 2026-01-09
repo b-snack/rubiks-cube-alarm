@@ -56,6 +56,20 @@ def calc_params(p1, p2):
   
   return a, b, c
 
+def find_intersection(params1, params2):
+  x=-1
+  y=-1
+  return_value = (int(x), int(y))
+  det = params1[0] * params2[1] - params2[0] * params1[1]
+  if (det < 0.5 and det > -0.5):
+    return_value = (-1, -1)
+  else:
+    x = (params2[1] * (-params1[2]) - params1[1] * (-params2[2])) / det
+    y = (params2[0] * (-params1[2]) - params1[0] * (-params2[2])) / det
+    return_value = (int(x), int(y))
+  
+  return return_value
+
 def is_quadrilateral(mask_image):
 
   contours, _ = cv.findContours(mask_image, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
