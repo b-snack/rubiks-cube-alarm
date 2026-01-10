@@ -22,7 +22,7 @@ Perfect for people who need an extra push to get out of bed in the morning!
 
 ---
 
-## 🛠️ Hardware Requirements
+## Hardware Requirements
 
 ### Required Components:
 
