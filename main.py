@@ -23,10 +23,10 @@ def main():
       play_alarm()
       
       while not is_there(photo()):
-        time.sleep(2)
+        time.sleep(5)
       
       while is_solved(photo()) != True:
-        time.sleep(2)
+        time.sleep(5)
       
       stop_alarm()
 

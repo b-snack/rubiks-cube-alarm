@@ -257,5 +257,3 @@ This project is open source and available under the MIT License.
 - Other sources
 
 ---
-
-**Happy Cubing!**
