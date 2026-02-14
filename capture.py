@@ -1,6 +1,6 @@
 import cv2 as cv
 
-def photo():
+def photo(debug=False):
   cap = cv.VideoCapture(0, cv.CAP_V4L2)
 
   for i in range(50):
@@ -8,16 +8,19 @@ def photo():
   
   ret,frame = cap.read() 
   cap.release()
-
-  return_value = None
   
-  if ret:
-    return_value = frame
+  if ret and debug:
+    cv.imwrite("debug_capture.jpg", frame)
+    print("saved debug_capture.jpg")
   
-  return return_value 
+  return frame if ret else None
     
+
+if __name__ == "__main__":
+  photo(debug=True)
 
 """
 Sources:
 - https://stackoverflow.com/questions/4179220/capture-single-picture-with-opencv
 """
+
