@@ -1,7 +1,7 @@
 import subprocess
 
 def play_alarm():
-  subprocess.Popen("cvlc", "--play-and-exit", "--loop", "media/alarm.mp3")
+  subprocess.Popen(["cvlc", "--play-and-exit", "--loop", "media/alarm.mp3"])
 
 def stop_alarm():
   subprocess.call("pkill", "vlc")
