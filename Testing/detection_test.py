@@ -3,7 +3,7 @@ from datetime import datetime
 import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
-from capture import photo
+from capture_mac import photo
 
 frame = photo()
 
@@ -179,7 +179,6 @@ def is_solved(frame, save_debug=True):
   if save_debug:
     cv.imwrite(f'media/original/{timestamp}.jpg', frame)
     cv.imwrite(f'media/mask-combined/{timestamp}.jpg', combined_mask)
-    cv.imwrite(f"media/contour/{timestamp}.jpg", contour_image)
 
   if check_opposites(solved_colors, OPPOSITES) and len(solved_colors) == 3:
     return_value = True
