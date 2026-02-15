@@ -157,8 +157,13 @@ def is_solved(frame):
           print(f"{color_name} isnt a quadriatlerial")
 
   return_value = check_opposites(solved_colors, OPPOSITES)
+  if check_opposites(solved_colors, OPPOSITES) and len(solved_colors) == 3:
+    return_value = True
+  
+  else: 
+    return_value = False
 
-  print(solved_sides, return_value)
+  print(f"{solved_sides} solved side(s), {return_value}")
 
   return return_value
 

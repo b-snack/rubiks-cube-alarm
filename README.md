@@ -9,7 +9,7 @@ This is my first time making something like this, so I'm putting this here:
 For questions, issues, or suggestions:
 
 - Open an issue on GitHub
-- Check the Troubleshooting section above
+- Check the Troubleshooting section below
 - Contact me at swuott2009@gmail.com
 
 Anyways,
@@ -30,6 +30,7 @@ Perfect for people who need an extra push to get out of bed in the morning!
 - USB Webcam or Raspberry Pi Camera Module
 - Speaker (USB speaker, HDMI audio, or 3.5mm audio jack)
 - **Rubik's Cube** (MUST be **STICKERLESS** - colored plastic, not stickers) - e.g. https://speedcubeshop.com/products/yuxin-little-magic-3x3
+- A white background (White table w/ white walls preferably)
 - Power supply for Raspberry Pi
 - MicroSD card (16GB+) with Raspberry Pi OS installed - tested on a 32GB
 
@@ -223,14 +224,15 @@ The alarm stops when:
 - At least 3 faces are solved
 - Opposite face pairs aren't both "solved" (blue/green, red/orange can't both be detected at once)
 
-### Supported Cube Colors
+### Supported Sides
 
-- ✅ Blue
-- ✅ Green
-- ✅ Orange
-- ✅ Yellow
-- ✅ Red
-- ❌ White (not detected due to issues with lighting & bg that could emerge)
+- Blue
+- Green
+- Orange
+- Yellow
+- Red
+
+WHITE DOES NOT COUNT, as it could interfere if your background is white.
 
 ---
 
