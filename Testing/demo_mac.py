@@ -15,10 +15,10 @@ def demo_alarm():
   print("Demo started")
   play_alarm()
 
-  print("Waiting for cube to be detected..")
-  while not is_there(photo()):
-    time.sleep(1)
-  print("Found!")
+  # print("Waiting for cube to be detected..")
+  # while not is_there(photo()):
+  #   time.sleep(1)
+  # print("Found!")
 
   print("Waiting to check if solved")
   while not is_solved(photo()):
