@@ -176,6 +176,7 @@ def is_solved(frame, save_debug=True):
         else:
           print(f"{color_name} isnt a quadriatlerial")
 
+<<<<<<< HEAD
   if save_debug:
     cv.imwrite(f'media/original/{timestamp}.jpg', frame)
     cv.imwrite(f'media/mask-combined/{timestamp}.jpg', combined_mask)
@@ -186,6 +187,16 @@ def is_solved(frame, save_debug=True):
   
   else: 
     return_value = False
+=======
+  return_value = check_opposites(solved_colors, OPPOSITES)
+  if check_opposites(solved_colors, OPPOSITES) and len(solved_colors) == 3:
+    return_value = True
+  
+  else: 
+    return_value = False
+
+  print(f"{solved_sides} solved side(s), {return_value}")
+>>>>>>> a7033d14cf73674664c85141e1e2599cc126a4e3
 
   return return_value
 

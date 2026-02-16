@@ -4,7 +4,7 @@ def play_alarm():
   subprocess.Popen(["cvlc", "--play-and-exit", "--loop", "media/alarm.mp3"])
 
 def stop_alarm():
-  subprocess.call("pkill", "vlc")
+  subprocess.call(["pkill", "vlc"])
 
 # def play_alarm():
 #   pygame.mixer.init()
