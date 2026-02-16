@@ -107,7 +107,7 @@ def is_there(frame):
   #singificant pixels:
   colors_found = 0
   threshold = 500
-  kernel = np.ones((7,7), np.uint8)
+  kernel = np.ones((5,5), np.uint8)
 
   # significatn colours
   significant_colours = []

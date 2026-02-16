@@ -13,13 +13,13 @@ COLOR_INFO = {
   'green': (np.array([40,50,50]), np.array([80,255,255])), # or 40,50,50,80,255,255
   'orange': (np.array([12, 150, 100]), np.array([18, 255, 255])),
   'yellow': (np.array([22,100,100]), np.array([38,255,255])),
-  'red': (None, None)
+  'red': (None, None),
+  'yellow_high': (np.array([0,0,200]), np.array([180,30,255]))
 }
 
 OPPOSITES = {
   "1": ["blue", "green"],
   "2": ["red", "orange"]
-  # no white & yelo b/c it doesnt detect white. 
 }
 
 def create_media():
